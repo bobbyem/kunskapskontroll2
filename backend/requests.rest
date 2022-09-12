@@ -1,0 +1,27 @@
+POST http://localhost:5000/accounts/signup
+Content-Type: application/json
+
+{
+    "username": "bobby",
+    "email": "bobby@mail.com",
+    "password": "1234"
+}
+
+###
+
+POST http://localhost:5000/accounts/login
+Content-Type: application/json
+
+{
+    "email": "bobby@mail.com",
+    "password": "1234"
+}
+
+###
+POST http://localhost:5000/interests
+Content-Type: application/json
+
+{
+    "userID": "ZjG8RqG8lmw8KkEK",
+    "data": ["öl", "hattar", "stickning"]
+}

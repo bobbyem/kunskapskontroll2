@@ -1,5 +1,6 @@
 const userDB = require("../config/userDB");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 //POST
 //Dest "/signup"
@@ -9,22 +10,28 @@ const addUser = async (req, res) => {
 
   //Check credentials
   if (!username || !email || !password) {
-    res.send("Missing Params");
+    console.log(req.body);
+    res.json("Missing Params");
     return;
   }
 
   //Check if the username is taken
-  const usernameTaken = await userDB.findOne({ username: username });
-  const emailTaken = await userDB.findOne({ email: email });
+  const usernameTaken = await userDB.findOne({ username });
+  const emailTaken = await userDB.findOne({ email });
   if (usernameTaken || emailTaken) {
-    res.send("Username and or Email taken");
+    res.json("Username and or Email taken");
     return;
   }
 
   //Add user to db
-  userDB.insert({ username, email, password: await bcrypt.hash(password, 10) });
+  userDB.insert({
+    username,
+    email,
+    password: await bcrypt.hash(password, 10),
+    cookie: "",
+  });
   //Respond with success
-  res.status(200).send(`User: ${username} with Email: ${email} added`);
+  res.status(200).json("User added");
 };
 
 //POST
@@ -49,12 +56,16 @@ const loginUser = async (req, res) => {
 
   //If passwords match
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.send("Login Success");
+    //Create cookie
+    const cookie = Math.floor(Math.random() * 10000);
+    //Set Cookie in userelement
+    userDB.update({ email }, { $set: { cookie } }, {});
+    res.cookie("loggedIn", cookie).json("Login success");
     return;
   }
 
   //No password match
-  res.send("Password incorrect");
+  res.json("Password incorrect");
 };
 
 module.exports = { addUser, loginUser };

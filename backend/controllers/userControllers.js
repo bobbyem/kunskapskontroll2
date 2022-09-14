@@ -6,6 +6,7 @@ const env = require("dotenv").config();
 //POST
 //Dest "/signup"
 const addUser = async (req, res) => {
+  console.log(req.body);
   //Store credentials
   const { username, email, password } = req.body;
 
@@ -20,7 +21,7 @@ const addUser = async (req, res) => {
   const usernameTaken = await userDB.findOne({ username });
   const emailTaken = await userDB.findOne({ email });
   if (usernameTaken || emailTaken) {
-    res.json("Username and or Email taken");
+    res.json({ title: "Error", prompt: "Username or email is taken" });
     return;
   }
 
@@ -64,7 +65,7 @@ const loginUser = async (req, res) => {
   }
 
   //No password match
-  res.json("Password incorrect");
+  res.json({ title: "Success", prompt: "User added" });
 };
 
 module.exports = { addUser, loginUser };

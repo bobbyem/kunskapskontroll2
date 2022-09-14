@@ -1,6 +1,7 @@
 const userDB = require("../config/userDB");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const env = require("dotenv").config();
 
 //POST
 //Dest "/signup"
@@ -56,11 +57,9 @@ const loginUser = async (req, res) => {
 
   //If passwords match
   if (user && (await bcrypt.compare(password, user.password))) {
-    //Create cookie
-    const cookie = Math.floor(Math.random() * 10000);
-    //Set Cookie in userelement
-    userDB.update({ email }, { $set: { cookie } }, {});
-    res.cookie("loggedIn", cookie).json("Login success");
+    //Generate token
+    const token = jwt.sign(user._id, process.env.TOKEN_SECRET);
+    res.cookie("accessToken", token).json({ token: token });
     return;
   }
 

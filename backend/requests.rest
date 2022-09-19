@@ -25,3 +25,7 @@ Content-Type: application/json
     "userID": "ZjG8RqG8lmw8KkEK",
     "data": ["öl", "hattar", "stickning"]
 }
+
+###
+GET http://localhost:5000/interests
+Content-Type: application/json

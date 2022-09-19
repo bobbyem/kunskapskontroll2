@@ -33,7 +33,7 @@ const addUser = async (req, res) => {
     cookie: "",
   });
   //Respond with success
-  res.status(200).json("User added");
+  res.status(200).json({ title: "Success", prompt: "Account created" });
 };
 
 //POST
@@ -53,19 +53,18 @@ const loginUser = async (req, res) => {
 
   //If no match - respond
   if (!user) {
-    res.status(200).send("User not found");
+    res.status(200).json({ title: "Error", prompt: "User not found" });
   }
 
   //If passwords match
   if (user && (await bcrypt.compare(password, user.password))) {
     //Generate token
     const token = jwt.sign(user._id, process.env.TOKEN_SECRET);
-    res.cookie("accessToken", token).json({ token: token });
+    res
+      .cookie("accessToken", token)
+      .json({ title: "Token", prompt: "Login successfull" });
     return;
   }
-
-  //No password match
-  res.json({ title: "Success", prompt: "User added" });
 };
 
 module.exports = { addUser, loginUser };

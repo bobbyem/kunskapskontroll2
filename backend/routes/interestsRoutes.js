@@ -1,7 +1,13 @@
 const express = require("express");
-const { addInterest } = require("../controllers/interestsControllers");
+const protect = require("../auth/protect");
+const {
+  addInterest,
+  getInterests,
+} = require("../controllers/interestsControllers");
 const router = express.Router();
 
-router.post("/", addInterest);
+//Routes
+router.post("/", protect, addInterest);
+router.get("/", protect, getInterests);
 
 module.exports = router;

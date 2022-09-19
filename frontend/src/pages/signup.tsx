@@ -64,7 +64,6 @@ function Signup() {
           >
             Signup
           </button>
-          <button>Login</button>
         </div>
       </form>
     </div>
